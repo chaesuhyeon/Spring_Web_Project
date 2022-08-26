@@ -8,7 +8,7 @@ import org.zerock.mapper.BoardMapper;
 
 import java.util.List;
 
-
+@Log4j
 @Service
 @AllArgsConstructor
 public class BoardServiceImpl implements BoardService {
@@ -17,6 +17,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void register(BoardVO board) {
+
 
     }
 

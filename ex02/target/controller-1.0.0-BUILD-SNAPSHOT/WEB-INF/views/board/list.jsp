@@ -104,6 +104,7 @@
             self.location = "/board/register";
         });
 
-    });
+    }
+    );
 </script>
 

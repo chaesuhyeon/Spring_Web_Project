@@ -42,6 +42,10 @@
                 <button data-oper="modify" class="btn btn-default" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
                 <button data-oper="list" class="btn btn-info" onclick="location.href='/board/list'">List</button>
 
+                <form id="operForm" action="/board/modify" method="get">
+<%--                    사용자가 수정 버튼을 누르는 경우에는 bno값을 같이 전달--%>
+                    <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
+                </form>
             </div>
             <%--     end panel body      --%>
         </div>
@@ -50,3 +54,19 @@
     <%--  end panel  --%>
 </div>
 <%-- /.row --%>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+        var operForm = $("#operForm");
+
+        $("button[data-oper = 'modify']").on("click", function (e){
+            operForm.attr("action", "/board/modify").submit();
+        });
+
+        $("button[data-oper = 'list']").on("click", function (e){
+            operForm.find("#bno").remove(); // list로 이동하는 경우에는 아무데이터도 필요하지 않으므로 bno지움 , submit을 통해서 리스트 페이지로 이동
+            operForm.attr("action", "/board/list");
+            operForm.submit();
+        });
+    });
+</script>

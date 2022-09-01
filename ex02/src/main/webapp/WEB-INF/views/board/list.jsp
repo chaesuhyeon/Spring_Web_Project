@@ -45,6 +45,36 @@
                                 </tr>
                             </c:forEach>
                         </table>
+
+                        <div class="pull-right">
+                            <ul class="pagination">
+                                <c:if test="${pageMaker.prev}">
+                                    <li class="paginate_button previous">
+                                        <a href="${pageMaker.startPage-1}">Previous</a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach var="num" begin="${pageMaker.startPage}" end ="${pageMaker.endPage}">
+                                    <li class="paginate_button ${pageMaker.cri.pageNum == num ? "active" : ""}">
+                                        <a href="${num}">${num}</a>
+                                    </li>
+                                </c:forEach>
+
+                                <c:if test="${pageMaker.next}">
+                                    <li class="paginate_button next">
+                                        <a href="${pageMaker.endPage +1}">Next</a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </div>
+                            <%-- end Pagination--%>
+
+                        <form id="actionForm" action="/board/list" method="get">
+                            <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+                            <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+                        </form>
+
+
                     <%--   Modal추가   --%>
                      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                          <div class="modal-dialog">
@@ -104,7 +134,14 @@
             self.location = "/board/register";
         });
 
-    }
-    );
+        var actionForm = $("#actionForm");
+        $(".paginate_button a").on("click", function (e) {
+            e.preventDefault(); // javaScript에서는 <a>태그를 클릭해도 페이지 이동이 없도록 preventDefault()처리
+            console.log('click');
+            actionForm.find("input[name='pageNum']").val($(this).attr("href")); // <form>태그 내의 pageNum 값은 href속성으로 변경
+            actionForm.submit(); // actionForm 자체를 submit()
+        });
+
+    });
 </script>
 

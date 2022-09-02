@@ -55,30 +55,59 @@ public class BoardController {
         model.addAttribute("board", service.get(bno));
     }
 
+//    @PostMapping("/modify")
+//    public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
+//        log.info("modify : " + board);
+//
+//        // service.modify는 수정 여부를 boolean으로 처리하므로 이를 이용해서 성공한 경우에만 RedirectAttributes에 추가
+//        if(service.modify(board)){
+//            rttr.addFlashAttribute("result", "success");
+//        }
+//
+//        rttr.addFlashAttribute("pageNum", cri.getPageNum());
+//        rttr.addFlashAttribute("amount", cri.getAmount());
+//        rttr.addFlashAttribute("type", cri.getType());
+//        rttr.addFlashAttribute("keyword", cri.getKeyword());
+//
+//        return "redirect:/board/list";
+//    }
+
+    // UriComponentsBuilder 사용하는 경우
     @PostMapping("/modify")
-    public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
+    public String modify(BoardVO board, Criteria cri, RedirectAttributes rttr){
         log.info("modify : " + board);
-        
+
         // service.modify는 수정 여부를 boolean으로 처리하므로 이를 이용해서 성공한 경우에만 RedirectAttributes에 추가
         if(service.modify(board)){
             rttr.addFlashAttribute("result", "success");
         }
 
-        rttr.addFlashAttribute("pageNum", cri.getPageNum());
-        rttr.addFlashAttribute("amount", cri.getAmount());
-        return "redirect:/board/list";
+        return "redirect:/board/list" + cri.getListLink();
     }
 
+//    @PostMapping("/remove")
+//    public String remove(@RequestParam("bno") Long bno , @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
+//        log.info("remove..." + bno);
+//        if(service.remove(bno)){
+//            rttr.addFlashAttribute("result" , "success");
+//        }
+//        rttr.addFlashAttribute("pageNum", cri.getPageNum());
+//        rttr.addFlashAttribute("amount", cri.getAmount());
+//        rttr.addFlashAttribute("type", cri.getType());
+//        rttr.addFlashAttribute("keyword", cri.getKeyword());
+//
+//        return "redirect:/board/list";
+//    }
+
+    // UriComponentsBuilder 사용하는 경우
     @PostMapping("/remove")
     public String remove(@RequestParam("bno") Long bno , @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
         log.info("remove..." + bno);
         if(service.remove(bno)){
             rttr.addFlashAttribute("result" , "success");
         }
-        rttr.addFlashAttribute("pageNum", cri.getPageNum());
-        rttr.addFlashAttribute("amount", cri.getAmount());
 
-        return "redirect:/board/list";
+        return "redirect:/board/list" + cri.getListLink();
     }
 
 }

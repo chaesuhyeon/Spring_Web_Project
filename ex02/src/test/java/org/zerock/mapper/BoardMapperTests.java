@@ -1,6 +1,7 @@
 package org.zerock.mapper;
 
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,5 +80,15 @@ public class BoardMapperTests {
         cri.setAmount(10);
         List<BoardVO> list = mapper.getListWithPaging(cri);
         list.forEach(board -> log.info(board.getBno()));
+    }
+
+    @Test
+    public void testSearch(){
+        Criteria cri = new Criteria();
+        cri.setKeyword("새로");
+        cri.setType("TC");
+
+        List<BoardVO> list = mapper.getListWithPaging(cri);
+        list.forEach(board -> log.info(board));
     }
 }

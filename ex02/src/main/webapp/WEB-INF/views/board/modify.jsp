@@ -19,6 +19,10 @@
 
             <div class="panel-body">
                 <form role="form" action="/board/modify" method="post">
+
+                    <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+                    <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
+
                     <div class = "form-group">
                         <label>Bno</label>
                         <input class="form-control" name="bno" value='<c:out value="${board.bno}"/>' readonly="readonly">
@@ -79,7 +83,12 @@
             } else if(operation ==='list'){
                 // 클릭한 버튼이 List인 경우 action 속성과 method 속성 변경
                 formObj.attr("action", "/board/list").attr("method", "get");
+                var pageNumTag = $("input[name='pageNum']").clone();
+                var amountTag = $("input[name='amount']").clone();
+
                 formObj.empty(); // 리스트로의 이동은 아무런 파라미터가 없기 때문에 <form>태그의 모든 내용은 삭제한 상태에서 submit()진행
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
             }
             formObj.submit();
         });

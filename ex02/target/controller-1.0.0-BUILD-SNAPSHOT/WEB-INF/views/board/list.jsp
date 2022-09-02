@@ -35,7 +35,8 @@
                                 <tr>
                                     <td><c:out value="${board.bno}"/></td>
                                     <td>
-                                        <a href='/board/get?bno=<c:out value="${board.bno}"/>'>
+<%--                                        <a  class="move" href='/board/get?bno=<c:out value="${board.bno}"/>'>--%>
+                                        <a  class="move" href='<c:out value="${board.bno}"/>'>
                                             <c:out value="${board.title}"/>
                                         </a>
                                     </td>
@@ -69,7 +70,7 @@
                         </div>
                             <%-- end Pagination--%>
 
-                        <form id="actionForm" action="/board/list" method="get">
+                        <form id="actionForm" method="get">
                             <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
                             <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
                         </form>
@@ -141,6 +142,13 @@
             actionForm.find("input[name='pageNum']").val($(this).attr("href")); // <form>태그 내의 pageNum 값은 href속성으로 변경
             actionForm.submit(); // actionForm 자체를 submit()
         });
+
+        $(".move").on("click" , function (e){
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='bno' value= '"+$(this).attr("href")+"'>");
+            actionForm.attr("action", "/board/get");
+            actionForm.submit();
+        })
 
     });
 </script>

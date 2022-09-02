@@ -45,6 +45,9 @@
                 <form id="operForm" action="/board/modify" method="get">
 <%--                    사용자가 수정 버튼을 누르는 경우에는 bno값을 같이 전달--%>
                     <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
+                    <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+                    <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
+
                 </form>
             </div>
             <%--     end panel body      --%>

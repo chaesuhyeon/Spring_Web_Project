@@ -188,6 +188,12 @@
 			<version>2.13.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
 		<!--	test시 직접 Java 인스턴스를 JSON타입의 문자열로 변환해야하는 일이 있을 수 있으므로 추가	-->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

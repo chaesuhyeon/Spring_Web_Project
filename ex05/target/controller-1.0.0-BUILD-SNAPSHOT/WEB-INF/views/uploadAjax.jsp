@@ -6,6 +6,27 @@
 <%--    <script src="https://code.jquery.com/jquery-latest.min.js"></script>--%>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Insert title here</title>
+
+    <style>
+        .uploadResult {
+            width=100%;
+            background-color: gray;
+        }
+        .uploadResult ul {
+            display:flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .uploadResult ul li {
+            list-style: none;
+            padding: 10px;
+        }
+        .uploadResult ul li img {
+            width: 20px;
+        }
+    </style>
+
 </head>
 <body>
 <h1>Upload with Ajax</h1>
@@ -13,6 +34,12 @@
     <input type="file" name="uploadFile" multiple>
 </div>
 <button id="uploadBtn">Upload</button>
+
+<div class="uploadResult">
+    <ul>
+
+    </ul>
+</div>
 
 <script>
     $(document).ready(function (){
@@ -32,6 +59,24 @@
             }
 
             return true;
+        }
+
+        var cloneObj = $(".uploadDiv").clone();
+
+        // 파일 이름 출력
+        var uploadResult = $(".uploadResult ul");
+        function showUploadFile(uploadResultArr){
+            var str = "";
+            $(uploadResultArr).each(function (i, obj){
+                if (!obj.image){
+                    str += "<li><img src='/resources/img/attach.png'>" + obj.fileName + "</li>"
+                } else {
+                    // str += "<li>" + obj.fileName + "</li>"
+                    var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid+"_" + obj.fileName);
+                    str += "<li><img src='/display?fileName=" + fileCallPath + "'></li>";
+                }
+            });
+            uploadResult.append(str);
         }
 
         $("#uploadBtn").on("click" , function (e){
@@ -59,11 +104,16 @@
                 success : function (result){
                     alert("Uploaded");
                     console.log(result);
+                    showUploadFile(result);
+                    $(".uploadDiv").html(cloneObj.html());
                 }
             }); // $.ajax
 
-
         });
+
+
+
+
     });
 </script>
 

@@ -11,6 +11,7 @@
 <body>
 <h1>Access Denied</h1>
 
+<!-- JSP에서는 HttpServletRequest 안에 'SPRING_SECURITY_403_EXCEPTION' 라는 이름으로 Access DeniedException 객체가 전달됨 -->
 <h2><c:out value="${SPRING_SECURITY_403_EXCEPTION.getMessage()}"/></h2>
 <h2><c:out value="${msg}"/></h2>
 </body>

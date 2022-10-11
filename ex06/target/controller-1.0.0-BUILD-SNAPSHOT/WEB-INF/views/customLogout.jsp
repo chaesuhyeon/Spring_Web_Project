@@ -3,12 +3,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ">
-    <title>Insert title here</title>
+    <title>Insert Title</title>
 </head>
 <body>
-<%--  admin  --%>
-<h1>/sample/admin page</h1>
-
-<a href="/customLogout">Logout</a>
+<h1> Logout Page </h1>
+<form action="/customLogout" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <button>로그아웃</button>
+</form>
 </body>
 </html>

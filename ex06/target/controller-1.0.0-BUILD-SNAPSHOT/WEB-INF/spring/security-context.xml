@@ -6,17 +6,24 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
 
 	<security:http>
 
 		<security:intercept-url pattern="/sample/all" access="permitAll"/>
 		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
 		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+
 <!--		<security:access-denied-handler error-page="/accessError"/>-->
 		<security:access-denied-handler ref="customAccessDenied"/>
 
 <!--		<security:form-login/>-->
-		<security:form-login login-page="/customLogin"/>
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+
+		<security:logout logout-url="/customLogout" invalidate-session="true" /> <!--		 로그아웃 시 세션을 무효화 시키는 설정이나 특정한 쿠키를 지우는 작업을 지정할 수 있음 -->
+
+<!--		<security:csrf disabled="true"/>-->
+
 	</security:http>
 
 	<security:authentication-manager>

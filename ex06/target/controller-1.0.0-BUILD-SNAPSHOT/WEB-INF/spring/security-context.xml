@@ -7,7 +7,9 @@
 
 	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
 	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
-	<bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean>
+<!--<bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean>  PasswordEncoder 구현할 때  -->
+	<bean id="bcryptPasswordEncoder"
+		  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<security:http>
 
@@ -15,12 +17,12 @@
 		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
 		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
 
+
 <!--		<security:access-denied-handler error-page="/accessError"/>-->
+		<!--		<security:form-login/>-->
+
 		<security:access-denied-handler ref="customAccessDenied"/>
-
-<!--		<security:form-login/>-->
-		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
-
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/> <!-- customLoginSuccess가 위에서 bean으로 등록 되었는지 확인 -->
 		<security:logout logout-url="/customLogout" invalidate-session="true" /> <!--		 로그아웃 시 세션을 무효화 시키는 설정이나 특정한 쿠키를 지우는 작업을 지정할 수 있음 -->
 
 <!--		<security:csrf disabled="true"/>-->
@@ -31,14 +33,24 @@
 
 		<security:authentication-provider>
 
-			<security:jdbc-user-service data-source-ref="dataSource"/> <!-- dataSource라는 이름의 빈이 root-context.xml에 등록이 되어 있는지 확인 !! -->
+			<!-- ============	db연결 한경우	============	--> <!-- db연결을 한 경우 스프링 5부터 password관련해서 encode처리를 해야 함 -->
 
-			<security:password-encoder ref="customPasswordEncoder"/>
+			<!--<security:jdbc-user-service data-source-ref="dataSource"/>--> <!-- dataSource라는 이름의 빈이 root-context.xml에 등록이 되어 있는지 확인 !! --> <!-- 시큐리티에서 지정된 테이블을 이용한 경우 -->
+			<security:jdbc-user-service data-source-ref="dataSource"
+										users-by-username-query="select userid, userpw, enabled from tbl_member where userid=?"
+										authorities-by-username-query="select  userid, auth from tbl_member_auth where userid=?" /> <!-- 기존 테이블 이용한 경우 -->
 
-		 <!-- <security:user-service>
+		<!--	<security:password-encoder ref="customPasswordEncoder"/> --> <!-- customPasswordEncoder가 위에서 bean으로 등록 되었는지 확인 --> <!-- PasswordEncoder 구현할 때  -->
+			<security:password-encoder ref="bcryptPasswordEncoder"/> <!--BcryptPasswordEncoder  -->
+			<!-- =========================================== 	-->
+
+
+			<!-- ============	db연결 안한경우	============	--> <!-- db연결을 안한 경우에는 password관련해서 encode처리를 안해도 오류x -->
+		 	<!-- <security:user-service>
 				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
 				<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
 			</security:user-service> -->
+			<!-- =========================================== 	-->
 
 		</security:authentication-provider>
 

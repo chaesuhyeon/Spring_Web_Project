@@ -10,6 +10,7 @@
 <!--<bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean>  PasswordEncoder 구현할 때  -->
 	<bean id="bcryptPasswordEncoder"
 		  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="customUserDetailsService" class="org.zerock.security.CustomUserDetailsService"></bean>
 
 	<security:http>
 
@@ -31,14 +32,19 @@
 
 	<security:authentication-manager>
 
-		<security:authentication-provider>
+<!--		<security:authentication-provider>--> <!-- ================= custom userDetail 이용 x ======================= 	-->
+		<security:authentication-provider user-service-ref="customUserDetailsService"> 			<!-- =================custom userDetail 이용할 때======================= 	-->
 
 			<!-- ============	db연결 한경우	============	--> <!-- db연결을 한 경우 스프링 5부터 password관련해서 encode처리를 해야 함 -->
 
+			<!--	jdbc를 이용하는 방법		-->
 			<!--<security:jdbc-user-service data-source-ref="dataSource"/>--> <!-- dataSource라는 이름의 빈이 root-context.xml에 등록이 되어 있는지 확인 !! --> <!-- 시큐리티에서 지정된 테이블을 이용한 경우 -->
-			<security:jdbc-user-service data-source-ref="dataSource"
+			<!--<security:jdbc-user-service data-source-ref="dataSource"
 										users-by-username-query="select userid, userpw, enabled from tbl_member where userid=?"
-										authorities-by-username-query="select  userid, auth from tbl_member_auth where userid=?" /> <!-- 기존 테이블 이용한 경우 -->
+										authorities-by-username-query="select  userid, auth from tbl_member_auth where userid=?" /> --> <!-- 기존 테이블 이용한 경우 -->
+			<!-- ============ /end/ jdbc를 이용하는 방법 ============== 	-->
+			<!-- =========================================== 	-->
+
 
 		<!--	<security:password-encoder ref="customPasswordEncoder"/> --> <!-- customPasswordEncoder가 위에서 bean으로 등록 되었는지 확인 --> <!-- PasswordEncoder 구현할 때  -->
 			<security:password-encoder ref="bcryptPasswordEncoder"/> <!--BcryptPasswordEncoder  -->

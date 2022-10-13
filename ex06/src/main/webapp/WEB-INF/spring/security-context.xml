@@ -24,9 +24,11 @@
 
 		<security:access-denied-handler ref="customAccessDenied"/>
 		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/> <!-- customLoginSuccess가 위에서 bean으로 등록 되었는지 확인 -->
-		<security:logout logout-url="/customLogout" invalidate-session="true" /> <!--		 로그아웃 시 세션을 무효화 시키는 설정이나 특정한 쿠키를 지우는 작업을 지정할 수 있음 -->
+		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="remember-me,JSESSION_ID" /> <!--		 로그아웃 시 세션을 무효화 시키는 설정이나 특정한 쿠키를 지우는 작업을 지정할 수 있음 -->
 
 <!--		<security:csrf disabled="true"/>-->
+
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
 
 	</security:http>
 

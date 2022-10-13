@@ -28,6 +28,8 @@
 
 <!--		<security:csrf disabled="true"/>-->
 
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+
 	</security:http>
 
 	<security:authentication-manager>

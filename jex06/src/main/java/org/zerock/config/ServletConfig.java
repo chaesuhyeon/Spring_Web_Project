@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @ComponentScan(basePackages = { "org.zerock.controller" })
-@EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled=true) // 어노테이션을 이용하는 스프링 시큐리티 설정 (enable 설정)
 public class ServletConfig implements WebMvcConfigurer {
 
   @Override

@@ -17,7 +17,7 @@
         <selectKey keyProperty="bno" order="BEFORE" resultType="long">
             select seq_board.nextval from dual
         </selectKey>
-        insert into tbl_board (bno, title, content, writer)2
+        insert into tbl_board (bno, title, content, writer)
         values (#{bno}, #{title}, #{content}, #{writer})
     </insert>
 

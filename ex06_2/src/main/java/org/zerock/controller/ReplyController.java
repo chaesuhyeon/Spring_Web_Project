@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.ReplyPageDTO;
@@ -20,6 +21,7 @@ public class ReplyController {
     private ReplyService service;
 
     // consumes와 produces를 이용해서 JSON 방식의 데이터만 처리하도록 하고, 문자열을 반환하도록 설계
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/new", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 

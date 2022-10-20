@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="../includes/header.jsp"%>
 
 <div class="row">
@@ -39,7 +40,14 @@
                     <input class="form-control" name="writer" value='<c:out value="${board.writer}"/>' readonly="readonly">
                 </div>
 
-                <button data-oper="modify" class="btn btn-default" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
+                <sec:authentication property="principal" var="pinfo"/>
+
+                    <sec:authorize access="isAuthenticated()">
+                        <c:if test="${pinfo.username eq board.writer}">
+                            <button data-oper="modify" class="btn btn-default">Modify</button>
+                        </c:if>
+                    </sec:authorize>
+
                 <button data-oper="list" class="btn btn-info" onclick="location.href='/board/list'">List</button>
 
                 <form id="operForm" action="/board/modify" method="get">
@@ -65,7 +73,11 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-comments fa-fw"></i> Reply
-                <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+
+                <sec:authorize access="isAuthenticated()"><!-- 로그인한 사용자만이 버튼 보이게 -->
+                    <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+                </sec:authorize>
+
             </div>
             <div class="panel-body">
                 <ul class="chat">
@@ -127,7 +139,7 @@
 
 <%@include file="../includes/footer.jsp"%>
 
-<script type="text/javascript" src="/resources/js/reply.jsp"></script>
+<script type="text/javascript" src="/resources/js/reply.js"></script>
 
 <script>
     $(document).ready(function (){
@@ -178,14 +190,30 @@
         var modalRemoveBtn = $("#modalRemoveBtn");
         var modalRegisterBtn = $("#modalRegisterBtn");
 
+        var replyer = null;
+
+        <sec:authorize access="isAuthenticated()">
+        replyer = '<sec:authentication property="principal.username"/>';
+        </sec:authorize>
+
+        var csrfHeaderName = "${_csrf.headerName}";
+        var csrfTokenValue = "${_csrf.token}";
+
         $("#addReplyBtn").on("click", function (e){
             modal.find("input").val("");
+            modal.find("input[name='replyer']").val(replyer);
             modalInputReplyDate.closest("div").hide();
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
             $(".modal").modal("show");
 
+        });
+
+        // Ajax spring security header... (beforeSend를 이용하는 방법도 있음)
+        // ajaxSend를 이용한 코드는 모든 Ajax 전송 시 CSRF 토큰을 같이 전송하도록 세팅되기 때문에 매번 Ajax 사용시 beforeSend를 호출해야하는 번거로움을 줄일 수 있음
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
         });
 
         modalRegisterBtn.on("click", function (e){

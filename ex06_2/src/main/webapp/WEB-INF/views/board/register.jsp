@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="../includes/header.jsp"%>
 
 <div class="row">
@@ -19,6 +20,7 @@
 
             <div class="panel-body">
                 <form role="form" action="/board/register" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <div class = "form-group">
                         <label>Title</label>
                         <input class="form-control" name="title">
@@ -31,7 +33,7 @@
 
                     <div class = "form-group">
                         <label>Writer</label>
-                        <input class="form-control" name="writer">
+                        <input class="form-control" name="writer" value='<sec:authentication property="principal.username"/>' readonly="readonly">
                     </div>
 
                     <button type="submit" class="btn btn-default">Submit Button</button>
@@ -45,3 +47,10 @@
     <%--  end panel  --%>
 </div>
 <%-- /.row --%>
+
+<script>
+    $(document).ready(function (e){
+        var csrfHeaderName = "${_csrf.headerName}";
+        var csrfTokenValue = "${_csrf.token}";
+    })
+</script>
